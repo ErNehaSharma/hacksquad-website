@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .calculator {
+            background-color: #fff;
+            border: 2px solid #333;
+            padding: 10px;
+            width: 300px;
+            margin: 0 auto;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 20px;
+        }
+        button {
+            width: 25%;
+            padding: 10px;
+            margin: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        /* Add background color to calculator sections */
+        .calculator-section {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 2px solid #ccc;
+            margin: 10px 0;
+        }
+        /* Styling for the currency selector */
+        .currency-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+        select {
+            width: 100px;
+            padding: 5px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calculator</h1>
+    <div class="calculator">
+        <input type="text" id="display" readonly>
+        <br>
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="appendToDisplay('/')">/</button>
+        <button onclick="appendToDisplay('*')">*</button>
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button onclick="appendToDisplay('-')">-</button>
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button onclick="appendToDisplay('+')">+</button>
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button onclick="calculateResult()">=</button>
+        <button onclick="appendToDisplay('0')">0</button>
+        <button onclick="appendToDisplay('.')">.</button>
+    </div>
+
+    <div class="calculator-section">
+        <h2>Tips Calculator</h2>
+        <label for="totalBill">Total Bill Amount: $</label>
+        <input type="number" id="totalBill" step="0.01"><br>
+        <label for="tipPercentage">Tip Percentage:</label>
+        <input type="number" id="tipPercentage" step="1"><br>
+        <div class="currency-selector">
+            <label for="currency">Select Currency:</label>
+            <select id="currency">
+                <option value="usd">USD</option>
+                <option value="inr">INR</option>
+            </select>
+        </div>
+        <button onclick="calculateTip()">Calculate Tip</button>
+        <p id="tipAmount"></p>
+        <p id="totalBillWithTip"></p>
+    </div>
+
+    <div class="calculator-section">
+        <h2>Percentage Calculator</h2>
+        <label for="baseValue">Base Value: </label>
+        <input type="number" id="baseValue" step="0.01"><br>
+        <label for="percentage">Percentage: </label>
+        <input type="number" id="percentage" step="0.01"><br>
+        <button onclick="calculatePercentage()">Calculate Percentage</button>
+        <p id="percentageResult"></p>
+    </div>
+
+    <script>
+        let display = document.getElementById("display");
+        let totalBillInput = document.getElementById("totalBill");
+        let tipPercentageInput = document.getElementById("tipPercentage");
+        let tipAmountOutput = document.getElementById("tipAmount");
+        let totalBillWithTipOutput = document.getElementById("totalBillWithTip");
+
+        function appendToDisplay(value) {
+            display.value += value;
+        }
+
+        function clearDisplay() {
+            display.value = "";
+        }
+
+        function calculateResult() {
+            try {
+                let result = eval(display.value);
+                display.value = result;
+            } catch (error) {
+                display.value = "Error";
+            }
+        }
+
+        function calculateTip() {
+            let totalBill = parseFloat(totalBillInput.value);
+            let tipPercentage = parseFloat(tipPercentageInput.value);
+            let currency = document.getElementById("currency").value;
+            
+            if (!isNaN(totalBill) && !isNaN(tipPercentage)) {
+                let tipAmount = (totalBill * tipPercentage) / 100;
+                let totalBillWithTip = totalBill + tipAmount;
+                tipAmountOutput.textContent = `Tip Amount: ${currency === 'usd' ? '$' : ''}${tipAmount.toFixed(2)}${currency === 'inr' ? ' INR' : ''}`;
+                totalBillWithTipOutput.textContent = `Total Bill with Tip: ${currency === 'usd' ? '$' : ''}${totalBillWithTip.toFixed(2)}${currency === 'inr' ? ' INR' : ''}`;
+            } else {
+                tipAmountOutput.textContent = "";
+                totalBillWithTipOutput.textContent = "";
+            }
+        }
+
+        function calculatePercentage() {
+            let baseValue = parseFloat(document.getElementById("baseValue").value);
+            let percentage = parseFloat(document.getElementById("percentage").value);
+
+            if (!isNaN(baseValue) && !isNaN(percentage)) {
+                let result = (baseValue * percentage) / 100;
+                document.getElementById("percentageResult").textContent = `Result: ${result.toFixed(2)}`;
+            } else {
+                document.getElementById("percentageResult").textContent = "";
+            }
+        }
+    </script>
+</body>
+</html>
