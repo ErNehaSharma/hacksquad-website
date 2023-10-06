@@ -1,0 +1,81 @@
+html part
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Digital Clock</title>
+</head>
+<body>
+    <div class="clock">
+        <div id="time"></div>
+        <div id="ampm"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+css part--------------------------------
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #3498db; /* Set an initial background color */
+    transition: background-color 1s ease-in-out;
+}
+
+.clock {
+    font-size: 3rem;
+    text-align: center;
+    position: relative; /* Position the AM/PM indicator */
+    border: 2px solid #fff; /* Add a white border */
+    border-radius: 10px; /* Add border radius for a rounded appearance */
+    padding: 10px; /* Add some padding for spacing */
+}
+
+#ampm {
+    position: absolute;
+    bottom: 0;
+    left: 130%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    color: #fff; /* White text color */
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+javasript part-------------------------------------------
+function updateClock() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+    
+    const timeString = `${formattedHours}:${minutes}:${seconds}`;
+    
+    document.getElementById('time').textContent = timeString;
+    document.getElementById('ampm').textContent = ampm;
+
+    // Dynamic background color change every second
+    const randomColor = getRandomColor();
+    document.body.style.backgroundColor = randomColor;
+}
+
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+// Update the clock every second
+setInterval(updateClock, 1000);
+
+// Initial call to set the clock
+updateClock();
